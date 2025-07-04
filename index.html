@@ -366,7 +366,7 @@
       box-shadow: 0 10px 35px rgba(0, 119, 204, 0.8);
     }
     /* Form styling */
-    #feedbackForm, #orderForm {
+    #feedbackForm, #orderForm, #authForm {
       max-width: 650px;
       margin: 1rem auto 0;
       background: #151515;
@@ -375,11 +375,11 @@
       box-shadow: 0 8px 30px rgba(0, 170, 255, 0.7);
       user-select: none;
     }
-    body.light-mode #feedbackForm, body.light-mode #orderForm {
+    body.light-mode #feedbackForm, body.light-mode #orderForm, body.light-mode #authForm {
       background: #fff;
       box-shadow: 0 8px 30px rgba(0, 119, 204, 0.5);
     }
-    #feedbackForm label, #orderForm label {
+    #feedbackForm label, #orderForm label, #authForm label {
       display: block;
       margin-bottom: 0.4rem;
       font-weight: 600;
@@ -387,7 +387,7 @@
       opacity: 0;
       animation: fadeIn 0.5s ease-out forwards;
     }
-    body.light-mode #feedbackForm label, body.light-mode #orderForm label {
+    body.light-mode #feedbackForm label, body.light-mode #orderForm label, body.light-mode #authForm label {
       color: #0077cc;
     }
     #feedbackForm textarea,
@@ -395,7 +395,9 @@
     #orderForm textarea,
     #orderForm input[type="email"],
     #orderForm input[type="number"],
-    #orderForm select {
+    #orderForm select,
+    #authForm input[type="password"],
+    #exampleUpload input[type="file"] {
       width: 100%;
       padding: 14px 18px;
       margin-bottom: 1rem;
@@ -416,7 +418,9 @@
     body.light-mode #orderForm textarea,
     body.light-mode #orderForm input[type="email"],
     body.light-mode #orderForm input[type="number"],
-    body.light-mode #orderForm select {
+    body.light-mode #orderForm select,
+    body.light-mode #authForm input[type="password"],
+    body.light-mode #exampleUpload input[type="file"] {
       background: #f0f0f0;
       color: #333;
       border: 1px solid #ccc;
@@ -436,7 +440,9 @@
     #orderForm textarea:focus,
     #orderForm input[type="email"]:focus,
     #orderForm input[type="number"]:focus,
-    #orderForm select:focus {
+    #orderForm select:focus,
+    #authForm input[type="password"]:focus,
+    #exampleUpload input[type="file"]:focus {
       outline: none;
       box-shadow: 0 0 18px #00d4ff;
       background: #1a1a1a;
@@ -446,11 +452,13 @@
     body.light-mode #orderForm textarea:focus,
     body.light-mode #orderForm input[type="email"]:focus,
     body.light-mode #orderForm input[type="number"]:focus,
-    body.light-mode #orderForm select:focus {
+    body.light-mode #orderForm select:focus,
+    body.light-mode #authForm input[type="password"]:focus,
+    body.light-mode #exampleUpload input[type="file"]:focus {
       box-shadow: 0 0 18px #0077cc;
       background: #e0e0e0;
     }
-    #feedbackForm button, #orderForm button {
+    #feedbackForm button, #orderForm button, #authForm button, #uploadButton {
       background-color: #00d4ff;
       border: none;
       padding: 1rem 3rem;
@@ -465,26 +473,26 @@
       width: 100%;
       position: relative;
     }
-    body.light-mode #feedbackForm button, body.light-mode #orderForm button {
+    body.light-mode #feedbackForm button, body.light-mode #orderForm button, body.light-mode #authForm button, body.light-mode #uploadButton {
       background-color: #0077cc;
       box-shadow: 0 6px 25px rgba(0, 119, 204, 0.8);
     }
-    #feedbackForm button:hover, #orderForm button:hover {
+    #feedbackForm button:hover, #orderForm button:hover, #authForm button:hover, #uploadButton:hover {
       background-color: #0088cc;
       box-shadow: 0 8px 35px rgba(0, 136, 204, 1);
       transform: translateY(-3px);
     }
-    body.light-mode #feedbackForm button:hover, body.light-mode #orderForm button:hover {
+    body.light-mode #feedbackForm button:hover, body.light-mode #orderForm button:hover, body.light-mode #authForm button:hover, body.light-mode #uploadButton:hover {
       background-color: #005bbb;
     }
-    #feedbackForm button:active, #orderForm button:active {
+    #feedbackForm button:active, #orderForm button:active, #authForm button:active, #uploadButton:active {
       transform: scale(0.95);
     }
-    #feedbackForm button:disabled, #orderForm button:disabled {
+    #feedbackForm button:disabled, #orderForm button:disabled, #authForm button:disabled, #uploadButton:disabled {
       opacity: 0.7;
       cursor: not-allowed;
     }
-    #feedbackMessage, #orderMessage {
+    #feedbackMessage, #orderMessage, #authMessage, #uploadMessage {
       margin-top: 0.8rem;
       font-weight: 600;
       min-height: 1.4rem;
@@ -540,6 +548,38 @@
     .notes-section ul {
       margin: 0;
       padding-left: 1.5rem;
+    }
+    /* Examples grid */
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 1rem 0;
+    }
+    .example-card {
+      background: #222;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 170, 255, 0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    body.light-mode .example-card {
+      background: #f0f0f0;
+      box-shadow: 0 4px 15px rgba(0, 119, 204, 0.3);
+    }
+    .example-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .example-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(0, 212, 255, 0.7);
+    }
+    body.light-mode .example-card:hover {
+      box-shadow: 0 8px 25px rgba(0, 119, 204, 0.7);
     }
     /* Footer */
     footer {
@@ -666,8 +706,11 @@
     }
     /* Responsive tweaks */
     @media (max-width: 600px) {
-      .store-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      .store-grid, .examples-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+      .example-card img {
+        height: 150px;
       }
       .box-carousel {
         gap: 1.2rem;
@@ -683,7 +726,7 @@
       .container {
         padding: 0.8rem 1.5rem 1.5rem;
       }
-      #feedbackForm, #orderForm {
+      #feedbackForm, #orderForm, #authForm {
         padding: 1.2rem 1.5rem;
       }
       .modal-content {
@@ -704,6 +747,7 @@
       <button class="active" role="tab" aria-selected="true" aria-controls="wave" id="tab-wave" data-tab="wave" tabindex="0">Wave</button>
       <button role="tab" aria-selected="false" aria-controls="order" id="tab-order" data-tab="order" tabindex="-1">Order</button>
       <button role="tab" aria-selected="false" aria-controls="contact" id="tab-contact" data-tab="contact" tabindex="-1">Feedback</button>
+      <button role="tab" aria-selected="false" aria-controls="examples" id="tab-examples" data-tab="examples" tabindex="-1">Examples</button>
     </nav>
     <!-- Tab Contents -->
     <section id="wave" class="tab-content active" role="tabpanel" aria-labelledby="tab-wave" tabindex="0">
@@ -790,7 +834,7 @@
         <p id="quantityHelp" class="sr-only">Enter the quantity of the selected service (minimum 1).</p>
         <label for="complexity">Complexity Level (for variable-priced items)</label>
         <select id="complexity" name="complexity" aria-describedby="complexityHelp">
-          <n value="" disabled selected>Select complexity (if applicable)</option>
+          <option value="" disabled selected>Select complexity (if applicable)</option>
           <option value="Low">Low</option>
           <option value="Medium">Medium</option>
           <option value="High">High</option>
@@ -821,6 +865,26 @@
         <button type="submit">Send Feedback</button>
         <p id="feedbackMessage" role="alert" aria-live="assertive"></p>
       </form>
+    </section>
+    <section id="examples" class="tab-content" role="tabpanel" aria-labelledby="tab-examples" tabindex="0">
+      <h2>Examples</h2>
+      <p>View examples of our work below. Authorized users can upload new examples.</p>
+      <form id="authForm" aria-live="polite" aria-atomic="true" novalidate style="display: block;">
+        <label for="password">Password *</label>
+        <input type="password" id="password" name="password" placeholder="Enter the upload password" required aria-required="true" aria-describedby="passwordHelp" />
+        <p id="passwordHelp" class="sr-only">Enter the password to unlock the upload feature (for authorized users only).</p>
+        <button type="submit">Verify Password</button>
+        <p id="authMessage" role="alert" aria-live="assertive"></p>
+      </form>
+      <div id="exampleUpload" style="display: none; max-width: 650px; margin: 1rem auto;">
+        <label for="exampleImage">Upload Example Image (PNG, JPG, max 5MB)</label>
+        <input type="file" id="exampleImage" accept="image/png,image/jpeg,image/jpg" aria-describedby="exampleImageHelp" />
+        <p id="exampleImageHelp" class="sr-only">Upload a PNG or JPG image (max 5MB) to showcase your work.</p>
+        <button id="uploadButton">Upload Example</button>
+        <p id="uploadMessage" role="alert" aria-live="assertive"></p>
+      </div>
+      <p><em>Note: Uploaded images are temporary and reset on page refresh. Contact <a href="mailto:orders@wavementstudio.com">orders@wavementstudio.com</a> for persistent uploads.</em></p>
+      <div id="examplesGrid" class="examples-grid" aria-label="Wave Studio example images"></div>
     </section>
   </div>
   <footer>
@@ -1118,6 +1182,91 @@
       orderMsg.style.color = '#88c571';
       orderMsg.textContent = 'Retrying submission...';
       submitOrder(pendingOrder);
+    });
+    // Examples tab handling
+    const authForm = document.getElementById('authForm');
+    const authMsg = document.getElementById('authMessage');
+    const exampleUpload = document.getElementById('exampleUpload');
+    const uploadButton = document.getElementById('uploadButton');
+    const exampleImage = document.getElementById('exampleImage');
+    const uploadMessage = document.getElementById('uploadMessage');
+    const examplesGrid = document.getElementById('examplesGrid');
+    const correctPassword = 'WaveMonacoUploads';
+    // Load existing images from sessionStorage
+    function loadImages() {
+      const images = JSON.parse(sessionStorage.getItem('exampleImages') || '[]');
+      examplesGrid.innerHTML = '';
+      images.forEach(src => {
+        const card = document.createElement('div');
+        card.className = 'example-card';
+        card.innerHTML = `<img src="${src}" alt="Wave Studio example work" loading="lazy">`;
+        examplesGrid.appendChild(card);
+      });
+    }
+    loadImages();
+    authForm.addEventListener('submit', e => {
+      e.preventDefault();
+      authMsg.textContent = '';
+      const password = authForm.password.value.trim();
+      if (!password) {
+        authMsg.style.color = '#ff6161';
+        authMsg.textContent = 'Please enter the password.';
+        authForm.password.focus();
+        return;
+      }
+      if (password === correctPassword) {
+        authMsg.style.color = '#88c571';
+        authMsg.textContent = 'Access granted! You can now upload examples.';
+        authForm.style.display = 'none';
+        exampleUpload.style.display = 'block';
+        sessionStorage.setItem('isAuthorized', 'true');
+      } else {
+        authMsg.style.color = '#ff6161';
+        authMsg.textContent = 'Incorrect password. Please try again.';
+        authForm.password.focus();
+      }
+    });
+    // Check if already authorized
+    if (sessionStorage.getItem('isAuthorized') === 'true') {
+      authForm.style.display = 'none';
+      exampleUpload.style.display = 'block';
+    }
+    uploadButton.addEventListener('click', () => {
+      const file = exampleImage.files[0];
+      uploadMessage.textContent = '';
+      if (!file) {
+        uploadMessage.style.color = '#ff6161';
+        uploadMessage.textContent = 'Please select an image to upload.';
+        exampleImage.focus();
+        return;
+      }
+      if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
+        uploadMessage.style.color = '#ff6161';
+        uploadMessage.textContent = 'Please upload a PNG or JPG image.';
+        exampleImage.focus();
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        uploadMessage.style.color = '#ff6161';
+        uploadMessage.textContent = 'Image size exceeds 5MB limit.';
+        exampleImage.focus();
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        const images = JSON.parse(sessionStorage.getItem('exampleImages') || '[]');
+        images.push(reader.result);
+        sessionStorage.setItem('exampleImages', JSON.stringify(images));
+        loadImages();
+        uploadMessage.style.color = '#88c571';
+        uploadMessage.textContent = 'Image uploaded successfully! Visible until page refresh.';
+        exampleImage.value = '';
+      };
+      reader.onerror = () => {
+        uploadMessage.style.color = '#ff6161';
+        uploadMessage.textContent = 'Error reading image. Please try again.';
+      };
+      reader.readAsDataURL(file);
     });
   </script>
 </body>
