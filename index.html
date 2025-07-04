@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wave Studio - Pricing & Order</title>
+  <style>
+    /* Reset & base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #eee;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    body.light-mode {
+      background: #f5f5f5;
+      color: #333;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+    a {
+      color: #00d4ff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #00aaff;
+    }
+    body.light-mode a {
+      color: #0077cc;
+    }
+    body.light-mode a:hover {
+      color: #005bbb;
+    }
+    h1, h2, h3, h4 {
+      margin-top: 0;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #00d4ff;
+      user-select: none;
+    }
+    body.light-mode h1, body.light-mode h2, body.light-mode h3, body.light-mode h4 {
+      color: #0077cc;
+    }
+    p {
+      font-size: 0.95rem;
+      margin: 0.5rem 0;
+    }
+    /* Container */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1rem 2rem 2rem;
+    }
+    /* Header */
+    header {
+      background: linear-gradient(90deg, #00aaff 0%, #005bbb 100%);
+      padding: 1.5rem 0;
+      box-shadow: 0 6px 12px rgba(0, 170, 255, 0.5);
+      user-select: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    body.light-mode header {
+      background: linear-gradient(90deg, #0077cc 0%, #004a99 100%);
+    }
+    header h1 {
+      text-align: center;
+      font-size: 2.3rem;
+      letter-spacing: 0.08em;
+      color: white;
+      margin: 0;
+      text-shadow: 0 0 12px rgba(0, 212, 255, 0.8);
+    }
+    /* Theme toggle */
+    #themeToggle {
+      position: absolute;
+      right: 2rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: white;
+      transition: transform 0.3s ease;
+    }
+    #themeToggle:hover {
+      transform: scale(1.2);
+    }
+    /* Tabs */
+    .tab-buttons {
+      display: flex;
+      justify-content: center;
+      background: #151515;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.9);
+      margin: 1rem 0 0.5rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    body.light-mode .tab-buttons {
+      background: #e0e0e0;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .tab-buttons::-webkit-scrollbar {
+      display: none;
+    }
+    .tab-buttons button {
+      background: transparent;
+      border: none;
+      padding: 1.2rem 2.5rem;
+      color: #ccc;
+      font-size: 1.15rem;
+      cursor: pointer;
+      transition: color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+      font-weight: 600;
+      user-select: none;
+      position: relative;
+      white-space: nowrap;
+    }
+    body.light-mode .tab-buttons button {
+      color: #555;
+    }
+    .tab-buttons button:hover,
+    .tab-buttons button:focus {
+      color: #00d4ff;
+      transform: translateY(-2px);
+      outline: none;
+    }
+    body.light-mode .tab-buttons button:hover,
+    body.light-mode .tab-buttons button:focus {
+      color: #0077cc;
+    }
+    .tab-buttons button.active {
+      color: white;
+      background: linear-gradient(135deg, #00d4ff, #0077cc);
+      border-radius: 14px;
+      box-shadow: 0 6px 25px rgba(0,212,255,0.7);
+      font-weight: 700;
+      transform: translateY(-2px);
+      z-index: 1;
+    }
+    body.light-mode .tab-buttons button.active {
+      background: linear-gradient(135deg, #0077cc, #004a99);
+      box-shadow: 0 6px 25px rgba(0,119,204,0.7);
+    }
+    /* Tab content */
+    .tab-content {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      pointer-events: none;
+      max-width: 100%;
+      min-height: calc(100vh - 250px);
+    }
+    .tab-content.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    /* Price list grid */
+    .store-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.8rem 2.2rem;
+      margin-bottom: 2rem;
+    }
+    .store-grid h3 {
+      grid-column: 1 / -1;
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+      color: #00eaff;
+    }
+    body.light-mode .store-grid h3 {
+      color: #0077cc;
+    }
+    .store-grid .card {
+      background: linear-gradient(135deg, #005bbb 0%, #00aaff 100%);
+      border-radius: 18px;
+      padding: 1.8rem 2rem;
+      box-shadow: 0 6px 20px rgba(0, 170, 255, 0.6);
+      color: white;
+      font-weight: 600;
+      font-size: 1.15rem;
+      user-select: none;
+      cursor: default;
+      opacity: 0;
+      transform: scale(0.9) translateY(10px);
+      animation-fill-mode: forwards;
+      animation-name: fadeScaleUp;
+      animation-duration: 0.6s;
+      animation-timing-function: ease-out;
+      will-change: transform, opacity;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    body.light-mode .store-grid .card {
+      background: linear-gradient(135deg, #004a99 0%, #0077cc 100%);
+      box-shadow: 0 6px 20px rgba(0, 119, 204, 0.6);
+    }
+    .store-grid .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .store-grid .card:hover::before {
+      opacity: 1;
+    }
+    .store-grid .card:hover {
+      box-shadow: 0 12px 35px rgba(0, 212, 255, 0.9);
+      transform: scale(1.06) translateY(-5px);
+      animation: glow 1.5s infinite ease-in-out;
+    }
+    body.light-mode .store-grid .card:hover {
+      box-shadow: 0 12px 35px rgba(0, 119, 204, 0.9);
+    }
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 12px 35px rgba(0, 212, 255, 0.9); }
+      50% { box-shadow: 0 12px 40px rgba(0, 212, 255, 1); }
+    }
+    body.light-mode @keyframes glow {
+      0%, 100% { box-shadow: 0 12px 35px rgba(0, 119, 204, 0.9); }
+      50% { box-shadow: 0 12px 40px rgba(0, 119, 204, 1); }
+    }
+    .store-grid .card:nth-child(1) { animation-delay: 0.1s; }
+    .store-grid .card:nth-child(2) { animation-delay: 0.2s; }
+    .store-grid .card:nth-child(3) { animation-delay: 0.3s; }
+    .store-grid .card:nth-child(4) { animation-delay: 0.4s; }
+    .store-grid .card:nth-child(5) { animation-delay: 0.5s; }
+    .store-grid .card:nth-child(6) { animation-delay: 0.6s; }
+    .store-grid .card:nth-child(7) { animation-delay: 0.7s; }
+    .store-grid .card:nth-child(8) { animation-delay: 0.8s; }
+    .store-grid .card:nth-child(9) { animation-delay: 0.9s; }
+    .store-grid .card:nth-child(10) { animation-delay: 1s; }
+    @keyframes fadeScaleUp {
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    /* Category filter */
+    .category-filter {
+      max-width: 650px;
+      margin: 0.8rem auto;
+    }
+    .category-filter label {
+      font-weight: 600;
+      color: #00d4ff;
+      margin-right: 1rem;
+    }
+    body.light-mode .category-filter label {
+      color: #0077cc;
+    }
+    .category-filter select {
+      padding: 0.8rem 1rem;
+      border-radius: 10px;
+      border: none;
+      background: #222;
+      color: #eee;
+      font-size: 1rem;
+      transition: box-shadow 0.3s ease;
+    }
+    body.light-mode .category-filter select {
+      background: #fff;
+      color: #333;
+      border: 1px solid #ccc;
+    }
+    .category-filter select:focus {
+      outline: none;
+      box-shadow: 0 0 15px #00d4ff;
+    }
+    body.light-mode .category-filter select:focus {
+      box-shadow: 0 0 15px #0077cc;
+    }
+    /* Animated box carousel */
+    .box-carousel {
+      display: flex;
+      justify-content: center;
+      gap: 1.8rem;
+      margin-top: 1.5rem;
+      overflow: hidden;
+      width: 100%;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      user-select: none;
+    }
+    .box-carousel .box {
+      flex: 0 0 130px;
+      height: 130px;
+      background: linear-gradient(135deg, #00d4ff, #0077cc);
+      border-radius: 22px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.4rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(0, 212, 255, 0.6);
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s ease, background 0.6s ease;
+      will-change: transform, box-shadow;
+      user-select: none;
+      position: relative;
+      overflow: hidden;
+    }
+    body.light-mode .box-carousel .box {
+      background: linear-gradient(135deg, #0077cc, #004a99);
+      box-shadow: 0 8px 25px rgba(0, 119, 204, 0.6);
+    }
+    .box-carousel .box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .box-carousel .box:hover::before {
+      opacity: 1;
+    }
+    .box-carousel .box.active {
+      transform: scale(1.5) translateY(-20px);
+      box-shadow: 0 15px 40px rgba(0, 255, 255, 1);
+      background: linear-gradient(135deg, #00eaff, #0088cc);
+      z-index: 10;
+    }
+    body.light-mode .box-carousel .box.active {
+      box-shadow: 0 15px 40px rgba(0, 119, 204, 1);
+      background: linear-gradient(135deg, #0088dd, #003366);
+    }
+    .box-carousel .box:not(.active):hover {
+      transform: scale(1.15);
+      box-shadow: 0 10px 35px rgba(0, 212, 255, 0.8);
+    }
+    body.light-mode .box-carousel .box:not(.active):hover {
+      box-shadow: 0 10px 35px rgba(0, 119, 204, 0.8);
+    }
+    /* Form styling */
+    #feedbackForm, #orderForm {
+      max-width: 650px;
+      margin: 1rem auto 0;
+      background: #151515;
+      padding: 1.5rem 2rem;
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(0, 170, 255, 0.7);
+      user-select: none;
+    }
+    body.light-mode #feedbackForm, body.light-mode #orderForm {
+      background: #fff;
+      box-shadow: 0 8px 30px rgba(0, 119, 204, 0.5);
+    }
+    #feedbackForm label, #orderForm label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      color: #00d4ff;
+      opacity: 0;
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+    body.light-mode #feedbackForm label, body.light-mode #orderForm label {
+      color: #0077cc;
+    }
+    #feedbackForm textarea,
+    #feedbackForm input[type="email"],
+    #orderForm textarea,
+    #orderForm input[type="email"],
+    #orderForm input[type="number"],
+    #orderForm select {
+      width: 100%;
+      padding: 14px 18px;
+      margin-bottom: 1rem;
+      border-radius: 14px;
+      border: none;
+      font-size: 1.05rem;
+      font-family: inherit;
+      background: #222;
+      color: #eee;
+      box-shadow: inset 0 0 10px #005bbb;
+      transition: box-shadow 0.3s ease, background 0.3s ease;
+      opacity: 0;
+      animation: fadeIn 0.5s ease-out forwards;
+      animation-delay: 0.2s;
+    }
+    body.light-mode #feedbackForm textarea,
+    body.light-mode #feedbackForm input[type="email"],
+    body.light-mode #orderForm textarea,
+    body.light-mode #orderForm input[type="email"],
+    body.light-mode #orderForm input[type="number"],
+    body.light-mode #orderForm select {
+      background: #f0f0f0;
+      color: #333;
+      border: 1px solid #ccc;
+    }
+    #orderForm select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23eee'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1.5rem;
+    }
+    body.light-mode #orderForm select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23333'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    }
+    #feedbackForm textarea:focus,
+    #feedbackForm input[type="email"]:focus,
+    #orderForm textarea:focus,
+    #orderForm input[type="email"]:focus,
+    #orderForm input[type="number"]:focus,
+    #orderForm select:focus {
+      outline: none;
+      box-shadow: 0 0 18px #00d4ff;
+      background: #1a1a1a;
+    }
+    body.light-mode #feedbackForm textarea:focus,
+    body.light-mode #feedbackForm input[type="email"]:focus,
+    body.light-mode #orderForm textarea:focus,
+    body.light-mode #orderForm input[type="email"]:focus,
+    body.light-mode #orderForm input[type="number"]:focus,
+    body.light-mode #orderForm select:focus {
+      box-shadow: 0 0 18px #0077cc;
+      background: #e0e0e0;
+    }
+    #feedbackForm button, #orderForm button {
+      background-color: #00d4ff;
+      border: none;
+      padding: 1rem 3rem;
+      font-size: 1.15rem;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #0a0a0a;
+      box-shadow: 0 6px 25px rgba(0, 212, 255, 0.8);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      user-select: none;
+      width: 100%;
+      position: relative;
+    }
+    body.light-mode #feedbackForm button, body.light-mode #orderForm button {
+      background-color: #0077cc;
+      box-shadow: 0 6px 25px rgba(0, 119, 204, 0.8);
+    }
+    #feedbackForm button:hover, #orderForm button:hover {
+      background-color: #0088cc;
+      box-shadow: 0 8px 35px rgba(0, 136, 204, 1);
+      transform: translateY(-3px);
+    }
+    body.light-mode #feedbackForm button:hover, body.light-mode #orderForm button:hover {
+      background-color: #005bbb;
+    }
+    #feedbackForm button:active, #orderForm button:active {
+      transform: scale(0.95);
+    }
+    #feedbackForm button:disabled, #orderForm button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    #feedbackMessage, #orderMessage {
+      margin-top: 0.8rem;
+      font-weight: 600;
+      min-height: 1.4rem;
+      user-select: text;
+    }
+    #priceEstimate {
+      margin-top: 0.8rem;
+      font-weight: 600;
+      color: #88c571;
+      min-height: 1.4rem;
+    }
+    body.light-mode #priceEstimate {
+      color: #2e7d32;
+    }
+    /* Loader */
+    .loader {
+      display: none;
+      border: 3px solid #00d4ff;
+      border-top: 3px solid transparent;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    body.light-mode .loader {
+      border-color: #0077cc;
+      border-top-color: transparent;
+    }
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    /* Notes section */
+    .notes-section {
+      max-width: 650px;
+      margin: 1rem auto;
+      background: #151515;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 170, 255, 0.5);
+      font-size: 1rem;
+      color: #eee;
+    }
+    body.light-mode .notes-section {
+      background: #fff;
+      box-shadow: 0 4px 15px rgba(0, 119, 204, 0.3);
+      color: #333;
+    }
+    .notes-section ul {
+      margin: 0;
+      padding-left: 1.5rem;
+    }
+    /* Footer */
+    footer {
+      background: #151515;
+      padding: 1.5rem 0;
+      text-align: center;
+      box-shadow: 0 -4px 10px rgba(0, 170, 255, 0.5);
+      position: sticky;
+      bottom: 0;
+      width: 100%;
+    }
+    body.light-mode footer {
+      background: #e0e0e0;
+      box-shadow: 0 -4px 10px rgba(0, 119, 204, 0.3);
+    }
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .social-links a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      transition: transform 0.3s ease;
+    }
+    .social-links a:hover {
+      transform: scale(1.1);
+    }
+    .social-links svg {
+      width: 24px;
+      height: 24px;
+      fill: #00d4ff;
+    }
+    body.light-mode .social-links svg {
+      fill: #0077cc;
+    }
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.3s ease;
+    }
+    .modal-content {
+      background: #151515;
+      padding: 2rem;
+      border-radius: 14px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 8px 30px rgba(0, 170, 255, 0.7);
+      color: #eee;
+      transform: scale(0.8);
+      transition: transform 0.3s ease;
+    }
+    body.light-mode .modal-content {
+      background: #fff;
+      color: #333;
+      box-shadow: 0 8px 30px rgba(0, 119, 204, 0.5);
+    }
+    .modal-content h3 {
+      margin-top: 0;
+    }
+    .modal-content pre {
+      background: #222;
+      padding: 1rem;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 0.95rem;
+    }
+    body.light-mode .modal-content pre {
+      background: #f0f0f0;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .modal-buttons button {
+      flex: 1;
+      padding: 0.8rem;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .modal-buttons .confirm {
+      background: #00d4ff;
+      color: #0a0a0a;
+    }
+    body.light-mode .modal-buttons .confirm {
+      background: #0077cc;
+    }
+    .modal-buttons .confirm:hover {
+      background: #0088cc;
+      transform: translateY(-2px);
+    }
+    body.light-mode .modal-buttons .confirm:hover {
+      background: #005bbb;
+    }
+    .modal-buttons .cancel {
+      background: #ff6161;
+      color: white;
+    }
+    .modal-buttons .cancel:hover {
+      background: #cc4d4d;
+      transform: translateY(-2px);
+    }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      .store-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+      .box-carousel {
+        gap: 1.2rem;
+      }
+      .box-carousel .box {
+        flex: 0 0 100px;
+        height: 100px;
+        font-size: 1.1rem;
+      }
+      header h1 {
+        font-size: 1.8rem;
+      }
+      .container {
+        padding: 0.8rem 1.5rem 1.5rem;
+      }
+      #feedbackForm, #orderForm {
+        padding: 1.2rem 1.5rem;
+      }
+      .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Wave Studio - Pricing & Order</h1>
+    <button id="themeToggle" aria-label="Toggle dark/light mode">🌙</button>
+  </header>
+  <div class="container">
+    <!-- Tab Buttons -->
+    <nav class="tab-buttons" role="tablist" aria-label="Wave Studio Sections">
+      <button class="active" role="tab" aria-selected="true" aria-controls="wave" id="tab-wave" data-tab="wave" tabindex="0">Wave</button>
+      <button role="tab" aria-selected="false" aria-controls="order" id="tab-order" data-tab="order" tabindex="-1">Order</button>
+      <button role="tab" aria-selected="false" aria-controls="contact" id="tab-contact" data-tab="contact" tabindex="-1">Feedback</button>
+    </nav>
+    <!-- Tab Contents -->
+    <section id="wave" class="tab-content active" role="tabpanel" aria-labelledby="tab-wave" tabindex="0">
+      <h2>Wave Studio Pricelist</h2>
+      <p>Explore our premium services, custom-made and optimized for your needs. All prices in Robux.</p>
+      <div class="category-filter">
+        <label for="categoryFilter">Filter by Category:</label>
+        <select id="categoryFilter">
+          <option value="all">All Categories</option>
+          <option value="boosting">Boosting Services</option>
+          <option value="gfx">GFX</option>
+          <option value="kits">Kit Packs</option>
+          <option value="renders">Renders</option>
+          <option value="dev">Development Zone</option>
+          <option value="web">Website Development</option>
+          <option value="bots">Bots</option>
+        </select>
+      </div>
+      <div class="store-grid" aria-label="Wave Studio pricelist items">
+        <h3 data-category="boosting">Boosting Services</h3>
+        <div class="card" data-category="boosting">14x Server Boosts - 1,000 Robux</div>
+        <h3 data-category="gfx">GFX</h3>
+        <div class="card" data-category="gfx">Basic GFX - 70 Robux</div>
+        <div class="card" data-category="gfx">Advanced GFX - 155 Robux</div>
+        <div class="card" data-category="gfx">Premium GFX (Dynamic, Studio-Quality) - 200-500 Robux</div>
+        <h3 data-category="kits">Kit Packs</h3>
+        <div class="card" data-category="kits">Kits without Resell Permissions - 45 Robux</div>
+        <div class="card" data-category="kits">Kits with Resell Permissions - 75 Robux</div>
+        <h3 data-category="renders">Renders</h3>
+        <div class="card" data-category="renders">No Folds Render - 55 Robux</div>
+        <div class="card" data-category="renders">With Folds Render - 60 Robux</div>
+        <h3 data-category="dev">Development Zone</h3>
+        <div class="card" data-category="dev">Custom Anti-Cheat System - 500-1,000 Robux</div>
+        <div class="card" data-category="dev">Authentication/Login Systems - +250 Robux</div>
+        <h3 data-category="web">Website Development</h3>
+        <div class="card" data-category="web">Full Studio Website (Custom CMS) - 500-1,000 Robux</div>
+        <div class="card" data-category="web">Portfolio/Devlog Site - 800 Robux</div>
+        <h3 data-category="bots">Bots</h3>
+        <div class="card" data-category="bots">Basic Bot (Commands, Moderation) - 400 Robux</div>
+        <div class="card" data-category="bots">Advanced Bot (Live Stats, Signing) - 500-1,000 Robux</div>
+      </div>
+      <div class="notes-section">
+        <h3>Notes</h3>
+        <ul>
+          <li>All services are custom-made, optimized, and delivered with polish.</li>
+          <li>Discounts available for bulk orders or Wave Monaco partners.</li>
+          <li>All prices can be negotiated.</li>
+          <li>Most orders take 1–3 days, large systems up to 7 days.</li>
+        </ul>
+      </div>
+      <div class="box-carousel" role="list" aria-label="Wave Studio offer highlights">
+        <div class="box active" role="listitem" tabindex="0" aria-current="true">Fast</div>
+        <div class="box" role="listitem" tabindex="-1">Reliable</div>
+        <div class="box" role="listitem" tabindex="-1">Affordable</div>
+        <div class="box" role="listitem" tabindex="-1">Creative</div>
+        <div class="box" role="listitem" tabindex="-1">Trusted</div>
+      </div>
+    </section>
+    <section id="order" class="tab-content" role="tabpanel" aria-labelledby="tab-order" tabindex="0">
+      <h2>Place Your Order</h2>
+      <p>Select your desired service from the <a href="#wave">Wave Pricelist</a> and provide details below. Orders are logged for our team to process. Contact us via <a href="mailto:orders@wavementstudio.com">orders@wavementstudio.com</a> for inquiries.</p>
+      <form id="orderForm" aria-live="polite" aria-atomic="true" novalidate>
+        <label for="service">Select Service * <span aria-hidden="true">(see <a href="#wave">pricelist</a>)</span></label>
+        <select id="service" name="service" required aria-required="true" aria-describedby="serviceHelp">
+          <option value="" disabled selected>Select a service</option>
+          <option value="14x Server Boosts">14x Server Boosts - 1,000 Robux</option>
+          <option value="Basic GFX">Basic GFX - 70 Robux</option>
+          <option value="Advanced GFX">Advanced GFX - 155 Robux</option>
+          <option value="Premium GFX">Premium GFX - 200-500 Robux</option>
+          <option value="Kits without Resell Permissions">Kits without Resell Permissions - 45 Robux</option>
+          <option value="Kits with Resell Permissions">Kits with Resell Permissions - 75 Robux</option>
+          <option value="No Folds Render">No Folds Render - 55 Robux</option>
+          <option value="With Folds Render">With Folds Render - 60 Robux</option>
+          <option value="Custom Anti-Cheat System">Custom Anti-Cheat System - 500-1,000 Robux</option>
+          <option value="Authentication/Login Systems">Authentication/Login Systems - +250 Robux</option>
+          <option value="Full Studio Website">Full Studio Website (Custom CMS) - 500-1,000 Robux</option>
+          <option value="Portfolio/Devlog Site">Portfolio/Devlog Site - 800 Robux</option>
+          <option value="Basic Bot">Basic Bot (Commands, Moderation) - 400 Robux</option>
+          <option value="Advanced Bot">Advanced Bot (Live Stats, Signing) - 500-1,000 Robux</option>
+        </select>
+        <p id="serviceHelp" class="sr-only">Select a service from the Wave Pricelist to place your order.</p>
+        <label for="quantity">Quantity * <span id="quantityHint" aria-hidden="true">(e.g., 1 for single item)</span></label>
+        <input type="number" id="quantity" name="quantity" min="1" value="1" required aria-required="true" aria-describedby="quantityHelp" />
+        <p id="quantityHelp" class="sr-only">Enter the quantity of the selected service (minimum 1).</p>
+        <label for="complexity">Complexity Level (for variable-priced items)</label>
+        <select id="complexity" name="complexity" aria-describedby="complexityHelp">
+          <n value="" disabled selected>Select complexity (if applicable)</option>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+        <p id="complexityHelp" class="sr-only">Select complexity for services with variable pricing, such as Premium GFX or Custom Anti-Cheat System.</p>
+        <label for="orderDetails">Additional Details *</label>
+        <textarea id="orderDetails" name="orderDetails" rows="6" placeholder="Specify your requirements, customizations, or any other details..." required aria-required="true" aria-describedby="detailsHelp"></textarea>
+        <p id="detailsHelp" class="sr-only">Provide specific requirements or customizations for your order.</p>
+        <label for="orderEmail">Your Email (optional):</label>
+        <input type="email" id="orderEmail" name="orderEmail" placeholder="example@domain.com" aria-describedby="orderEmailHelp" />
+        <p id="orderEmailHelp" class="sr-only">Enter your email for order follow-up (optional).</p>
+        <p id="priceEstimate" aria-live="polite"></p>
+        <button type="submit" id="orderSubmit">Place Order<span class="loader" id="orderLoader"></span></button>
+        <button type="button" id="retrySubmit" style="display: none; background: #ff6161; margin-top: 0.8rem;">Retry Submission</button>
+        <p id="orderMessage" role="alert" aria-live="assertive"></p>
+      </form>
+    </section>
+    <section id="contact" class="tab-content" role="tabpanel" aria-labelledby="tab-contact" tabindex="0">
+      <h2>Feedback</h2>
+      <p>We love hearing from you! Please send us your feedback or inquiries.</p>
+      <form id="feedbackForm" aria-live="polite" aria-atomic="true" novalidate>
+        <label for="email">Your Email (optional):</label>
+        <input type="email" id="email" name="email" placeholder="example@domain.com" aria-describedby="emailHelp" />
+        <p id="emailHelp" class="sr-only">Enter your email for feedback follow-up (optional).</p>
+        <label for="message">Your Message *</label>
+        <textarea id="message" name="message" rows="6" placeholder="Type your message here..." required aria-required="true" aria-describedby="messageHelp"></textarea>
+        <p id="messageHelp" class="sr-only">Enter your feedback or inquiry message.</p>
+        <button type="submit">Send Feedback</button>
+        <p id="feedbackMessage" role="alert" aria-live="assertive"></p>
+      </form>
+    </section>
+  </div>
+  <footer>
+    <div class="social-links">
+      <a href="https://discord.gg/vHBRvNFnCC" target="_blank" aria-label="Join our Discord server">
+        <svg viewBox="0 0 24 24"><path d="M20.317 4.369a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.078.037 13.736 13.736 0 00-.617 1.098 18.027 18.027 0 00-5.474 0 13.736 13.736 0 00-.617-1.098.074.074 0 00-.078-.037 19.791 19.791 0 00-4.885 1.515 20.763 20.763 0 00-6.427 4.822 21.867 21.867 0 00-3.279 11.723.077.077 0 00.08.082 14.514 14.514 0 005.151 2.604.077.077 0 00.092-.021 10.267 10.267 0 001.045-1.687.074.074 0 00-.041-.101 7.536 7.536 0 01-1.083-.671.076.076 0 01-.008-.134 9.114 9.114 0 003.301-2.233 9.114 9.114 0 003.301 2.233.076.076 0 01-.008.134 7.536 7.536 0 01-1.083.671.074.074 0 00-.041.101 10.267 10.267 0 001.045 1.687.077.077 0 00.092.021 14.514 14.514 0 005.151-2.604.077.077 0 00.08-.082 21.867 21.867 0 00-3.279-11.723 20.763 20.763 0 00-6.427-4.822zM8.344 15.615c-1.015 0-1.841-.927-1.841-2.07s.826-2.07 1.841-2.07c1.016 0 1.841.927 1.841 2.07s-.825 2.07-1.841 2.07zm7.312 0c-1.015 0-1.841-.927-1.841-2.07s.826-2.07 1.841-2.07c1.016 0 1.841.927 1.841 2.07s-.825 2.07-1.841 2.07z"/></svg>
+        Join Discord
+      </a>
+      <a href="https://www.roblox.com/communities/33608534/Wave-Clothing-GFX-Studio#!/about" target="_blank" aria-label="Join our Roblox group">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>
+        Roblox Group
+      </a>
+    </div>
+    <p>Contact us at <a href="mailto:orders@wavementstudio.com">orders@wavementstudio.com</a></p>
+  </footer>
+  <div id="orderModal" class="modal" role="dialog" aria-live="polite">
+    <div class="modal-content">
+      <h3>Confirm Your Order</h3>
+      <pre id="orderSummary"></pre>
+      <div class="modal-buttons">
+        <button class="confirm">Confirm</button>
+        <button class="cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Tab switching logic
+    const tabs = document.querySelectorAll('.tab-buttons button');
+    const contents = document.querySelectorAll('.tab-content');
+    const boxes = document.querySelectorAll('.box-carousel .box');
+    function activateTab(tabName) {
+      tabs.forEach(btn => {
+        const isActive = btn.dataset.tab === tabName;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', isActive);
+        btn.tabIndex = isActive ? 0 : -1;
+      });
+      contents.forEach(content => {
+        content.classList.toggle('active', content.id === tabName);
+      });
+    }
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        activateTab(tab.dataset.tab);
+        const panel = document.getElementById(tab.dataset.tab);
+        if (panel) panel.focus();
+      });
+      tab.addEventListener('keydown', (e) => {
+        const idx = [...tabs].indexOf(e.target);
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          tabs[(idx + 1) % tabs.length].focus();
+        }
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          tabs[(idx - 1 + tabs.length) % tabs.length].focus();
+        }
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          activateTab(e.target.dataset.tab);
+          const panel = document.getElementById(e.target.dataset.tab);
+          if (panel) panel.focus();
+        }
+      });
+    });
+    // Wave box carousel cycling
+    let activeBoxIndex = 0;
+    function setActiveBox(index) {
+      boxes.forEach((box, i) => {
+        box.classList.toggle('active', i === index);
+        box.tabIndex = i === index ? 0 : -1;
+        box.setAttribute('aria-current', i === index ? 'true' : 'false');
+      });
+    }
+    setActiveBox(activeBoxIndex);
+    boxes.forEach((box, idx) => {
+      box.addEventListener('click', () => {
+        activeBoxIndex = idx;
+        setActiveBox(activeBoxIndex);
+      });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          activeBoxIndex = idx;
+          setActiveBox(activeBoxIndex);
+        }
+      });
+    });
+    setInterval(() => {
+      activeBoxIndex = (activeBoxIndex + 1) % boxes.length;
+      setActiveBox(activeBoxIndex);
+    }, 5000);
+    // Category filter
+    const categoryFilter = document.getElementById('categoryFilter');
+    const priceItems = document.querySelectorAll('.store-grid .card, .store-grid h3');
+    categoryFilter.addEventListener('change', () => {
+      const selectedCategory = categoryFilter.value;
+      priceItems.forEach(item => {
+        const itemCategory = item.dataset.category || item.textContent.toLowerCase();
+        if (selectedCategory === 'all' || itemCategory === selectedCategory) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      themeToggle.textContent = document.body.classList.contains('light-mode') ? '🌞' : '🌙';
+      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+    });
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light-mode');
+      themeToggle.textContent = '🌞';
+    }
+    // Feedback form handling
+    const feedbackForm = document.getElementById('feedbackForm');
+    const feedbackMsg = document.getElementById('feedbackMessage');
+    feedbackForm.addEventListener('submit', e => {
+      e.preventDefault();
+      feedbackMsg.textContent = '';
+      const email = feedbackForm.email.value.trim();
+      const message = feedbackForm.message.value.trim();
+      if (!message) {
+        feedbackMsg.style.color = '#ff6161';
+        feedbackMsg.textContent = 'Please enter a message before submitting.';
+        feedbackForm.message.focus();
+        return;
+      }
+      if (email && !/^\S+@\S+\.\S+$/.test(email)) {
+        feedbackMsg.style.color = '#ff6161';
+        feedbackMsg.textContent = 'Please enter a valid email address or leave it blank.';
+        feedbackForm.email.focus();
+        return;
+      }
+      feedbackMsg.style.color = '#88c571';
+      feedbackMsg.textContent = 'Sending feedback...';
+      setTimeout(() => {
+        feedbackMsg.style.color = '#88c571';
+        feedbackMsg.textContent = 'Thank you for your feedback! We will get back to you soon.';
+        feedbackForm.reset();
+      }, 1500);
+    });
+    // Order form handling
+    const orderForm = document.getElementById('orderForm');
+    const orderMsg = document.getElementById('orderMessage');
+    const priceEstimate = document.getElementById('priceEstimate');
+    const serviceSelect = document.getElementById('service');
+    const quantityInput = document.getElementById('quantity');
+    const complexitySelect = document.getElementById('complexity');
+    const retrySubmit = document.getElementById('retrySubmit');
+    const orderSubmit = document.getElementById('orderSubmit');
+    const orderLoader = document.getElementById('orderLoader');
+    const orderModal = document.getElementById('orderModal');
+    const orderSummary = document.getElementById('orderSummary');
+    const modalConfirm = orderModal.querySelector('.confirm');
+    const modalCancel = orderModal.querySelector('.cancel');
+    const priceMap = {
+      '14x Server Boosts': 1000,
+      'Basic GFX': 70,
+      'Advanced GFX': 155,
+      'Premium GFX': '200-500',
+      'Kits without Resell Permissions': 45,
+      'Kits with Resell Permissions': 75,
+      'No Folds Render': 55,
+      'With Folds Render': 60,
+      'Custom Anti-Cheat System': '500-1000',
+      'Authentication/Login Systems': 250,
+      'Full Studio Website': '500-1000',
+      'Portfolio/Devlog Site': 800,
+      'Basic Bot': 400,
+      'Advanced Bot': '500-1000'
+    };
+    let pendingOrder = null;
+    function updatePriceEstimate() {
+      const service = serviceSelect.value;
+      const quantity = parseInt(quantityInput.value) || 1;
+      priceEstimate.textContent = '';
+      if (priceMap[service]) {
+        const price = priceMap[service];
+        priceEstimate.textContent = typeof price === 'number'
+          ? `Estimated Price: ${price * quantity} Robux`
+          : `Estimated Price: ${price} Robux (based on complexity)`;
+      }
+    }
+    serviceSelect.addEventListener('change', updatePriceEstimate);
+    quantityInput.addEventListener('input', updatePriceEstimate);
+    async function submitOrder(orderData) {
+      orderSubmit.disabled = true;
+      orderLoader.style.display = 'block';
+      const webhookUrl = 'https://discord.com/api/webhooks/1386375321036783678/7UqaDg3EzCnOOoCitG3BM9lqo7k7PsHUKX937ZiSSDqeTGXCixMXs9VmpiHtjzIh0vYA';
+      const payload = {
+        content: `**New Order**\n**Service**: ${orderData.service}\n**Quantity**: ${orderData.quantity}\n**Complexity**: ${orderData.complexity || 'N/A'}\n**Details**: ${orderData.details}\n**Email**: ${orderData.email || 'None'}`
+      };
+      try {
+        const response = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        orderSubmit.disabled = false;
+        orderLoader.style.display = 'none';
+        if (response.ok) {
+          orderMsg.style.color = '#88c571';
+          orderMsg.textContent = 'Order submitted successfully! Our team will review it soon.';
+          orderForm.reset();
+          priceEstimate.textContent = '';
+          retrySubmit.style.display = 'none';
+        } else {
+          orderMsg.style.color = '#ff6161';
+          orderMsg.textContent = 'Failed to submit order to Discord. Order logged locally; please retry or contact support.';
+          retrySubmit.style.display = 'block';
+          console.log('Order (logged locally due to webhook failure):', payload);
+        }
+      } catch (error) {
+        orderSubmit.disabled = false;
+        orderLoader.style.display = 'none';
+        orderMsg.style.color = '#ff6161';
+        orderMsg.textContent = 'Error submitting order. Order logged locally; please retry or contact support.';
+        retrySubmit.style.display = 'block';
+        console.log('Order (logged locally due to error):', payload);
+      }
+    }
+    orderForm.addEventListener('submit', e => {
+      e.preventDefault();
+      orderMsg.textContent = '';
+      const service = orderForm.service.value;
+      const quantity = orderForm.quantity.value;
+      const complexity = orderForm.complexity.value;
+      const details = orderForm.orderDetails.value.trim();
+      const email = orderForm.orderEmail.value.trim();
+      if (!service) {
+        orderMsg.style.color = '#ff6161';
+        orderMsg.textContent = 'Please select a service.';
+        orderForm.service.focus();
+        return;
+      }
+      if (!quantity || quantity < 1) {
+        orderMsg.style.color = '#ff6161';
+        orderMsg.textContent = 'Please enter a valid quantity (minimum 1).';
+        orderForm.quantity.focus();
+        return;
+      }
+      if (!details) {
+        orderMsg.style.color = '#ff6161';
+        orderMsg.textContent = 'Please provide additional details for your order.';
+        orderForm.orderDetails.focus();
+        return;
+      }
+      if (email && !/^\S+@\S+\.\S+$/.test(email)) {
+        orderMsg.style.color = '#ff6161';
+        orderMsg.textContent = 'Please enter a valid email address or leave it blank.';
+        orderForm.orderEmail.focus();
+        return;
+      }
+      const variablePriced = [
+        'Premium GFX',
+        'Custom Anti-Cheat System',
+        'Full Studio Website',
+        'Advanced Bot'
+      ];
+      if (variablePriced.includes(service) && !complexity) {
+        orderMsg.style.color = '#ff6161';
+        orderMsg.textContent = 'Please select a complexity level for this service.';
+        orderForm.complexity.focus();
+        return;
+      }
+      pendingOrder = { service, quantity, complexity, details, email };
+      orderSummary.textContent = `Service: ${service}\nQuantity: ${quantity}\nComplexity: ${complexity || 'N/A'}\nDetails: ${details}\nEmail: ${email || 'None'}\n\nEstimated Price: ${priceMap[service] ? (typeof priceMap[service] === 'number' ? priceMap[service] * quantity : priceMap[service]) + ' Robux' : 'TBD'}`;
+      orderModal.style.display = 'flex';
+      orderModal.querySelector('.modal-content').style.transform = 'scale(1)';
+      modalConfirm.focus();
+    });
+    modalConfirm.addEventListener('click', () => {
+      orderModal.style.display = 'none';
+      orderMsg.style.color = '#88c571';
+      orderMsg.textContent = 'Submitting order...';
+      submitOrder(pendingOrder);
+    });
+    modalCancel.addEventListener('click', () => {
+      orderModal.style.display = 'none';
+      orderMsg.style.color = '#ff6161';
+      orderMsg.textContent = 'Order cancelled.';
+    });
+    orderModal.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        orderModal.style.display = 'none';
+        orderMsg.style.color = '#ff6161';
+        orderMsg.textContent = 'Order cancelled.';
+      }
+    });
+    retrySubmit.addEventListener('click', () => {
+      orderMsg.style.color = '#88c571';
+      orderMsg.textContent = 'Retrying submission...';
+      submitOrder(pendingOrder);
+    });
+  </script>
+</body>
+</html>
