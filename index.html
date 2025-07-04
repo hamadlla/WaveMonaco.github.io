@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wave Studio - Pricing & Order</title>
+  <style>
+    /* Reset & base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #eee;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a {
+      color: #00d4ff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #00aaff;
+    }
+    h1, h2, h3, h4 {
+      margin-top: 0;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #00d4ff;
+      user-select: none;
+    }
+    /* Container */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 4rem;
+    }
+    /* Header */
+    header {
+      background: linear-gradient(90deg, #00aaff 0%, #005bbb 100%);
+      padding: 1.5rem 0;
+      box-shadow: 0 6px 12px rgba(0, 170, 255, 0.5);
+      user-select: none;
+    }
+    header h1 {
+      text-align: center;
+      font-size: 2.3rem;
+      letter-spacing: 0.08em;
+      color: white;
+      margin: 0;
+      text-shadow: 0 0 12px rgba(0, 212, 255, 0.8);
+    }
+    /* Tabs */
+    .tab-buttons {
+      display: flex;
+      justify-content: center;
+      background: #151515;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.9);
+      margin: 2rem 0 2.5rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tab-buttons::-webkit-scrollbar {
+      display: none;
+    }
+    .tab-buttons button {
+      background: transparent;
+      border: none;
+      padding: 1.2rem 2.5rem;
+      color: #ccc;
+      font-size: 1.15rem;
+      cursor: pointer;
+      transition: color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+      font-weight: 600;
+      user-select: none;
+      position: relative;
+      white-space: nowrap;
+    }
+    .tab-buttons button:hover,
+    .tab-buttons button:focus {
+      color: #00d4ff;
+      transform: translateY(-2px);
+      outline: none;
+    }
+    .tab-buttons button.active {
+      color: white;
+      background: linear-gradient(135deg, #00d4ff, #0077cc);
+      border-radius: 14px;
+      box-shadow: 0 6px 25px rgba(0,212,255,0.7);
+      font-weight: 700;
+      transform: translateY(-2px);
+      z-index: 1;
+    }
+    /* Tab content fade + slide animation */
+    .tab-content {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      pointer-events: none;
+      max-width: 100%;
+    }
+    .tab-content.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    /* Price list grid */
+    .store-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.8rem 2.2rem;
+      margin-bottom: 2.5rem;
+    }
+    .store-grid .card {
+      background: linear-gradient(135deg, #005bbb 0%, #00aaff 100%);
+      border-radius: 18px;
+      padding: 1.8rem 2rem;
+      box-shadow: 0 6px 20px rgba(0, 170, 255, 0.6);
+      color: white;
+      font-weight: 600;
+      font-size: 1.15rem;
+      user-select: none;
+      cursor: default;
+      opacity: 0;
+      transform: scale(0.9) translateY(10px);
+      animation-fill-mode: forwards;
+      animation-name: fadeScaleUp;
+      animation-duration: 0.6s;
+      animation-timing-function: ease-out;
+      will-change: transform, opacity;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .store-grid .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .store-grid .card:hover::before {
+      opacity: 1;
+    }
+    .store-grid .card:hover {
+      box-shadow: 0 12px 35px rgba(0, 212, 255, 0.9);
+      transform: scale(1.06) translateY(-5px);
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1.06) translateY(-5px); }
+      50% { transform: scale(1.08) translateY(-5px); }
+    }
+    .store-grid .card:nth-child(1) { animation-delay: 0.1s; }
+    .store-grid .card:nth-child(2) { animation-delay: 0.2s; }
+    .store-grid .card:nth-child(3) { animation-delay: 0.3s; }
+    .store-grid .card:nth-child(4) { animation-delay: 0.4s; }
+    .store-grid .card:nth-child(5) { animation-delay: 0.5s; }
+    .store-grid .card:nth-child(6) { animation-delay: 0.6s; }
+    .store-grid .card:nth-child(7) { animation-delay: 0.7s; }
+    .store-grid .card:nth-child(8) { animation-delay: 0.8s; }
+    .store-grid .card:nth-child(9) { animation-delay: 0.9s; }
+    .store-grid .card:nth-child(10) { animation-delay: 1s; }
+    @keyframes fadeScaleUp {
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    /* Animated box carousel */
+    .box-carousel {
+      display: flex;
+      justify-content: center;
+      gap: 1.8rem;
+      margin-top: 2.5rem;
+      overflow: hidden;
+      width: 100%;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      user-select: none;
+    }
+    .box-carousel .box {
+      flex: 0 0 130px;
+      height: 130px;
+      background: linear-gradient(135deg, #00d4ff, #0077cc);
+      border-radius: 22px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.4rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(0, 212, 255, 0.6);
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s ease, background 0.6s ease;
+      will-change: transform, box-shadow;
+      user-select: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .box-carousel .box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .box-carousel .box:hover::before {
+      opacity: 1;
+    }
+    .box-carousel .box.active {
+      transform: scale(1.5) translateY(-20px);
+      box-shadow: 0 15px 40px rgba(0, 255, 255, 1);
+      background: linear-gradient(135deg, #00eaff, #0088cc);
+      z-index: 10;
+    }
+    .box-carousel .box:not(.active):hover {
+      transform: scale(1.15);
+      box-shadow: 0 10px 35px rgba(0, 212, 255, 0.8);
+    }
+    /* Form styling (Feedback and Order) */
+    #feedbackForm, #orderForm {
+      max-width: 650px;
+      margin: 2.5rem auto 0;
+      background: #151515;
+      padding: 2.5rem 3rem;
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(0, 170, 255, 0.7);
+      user-select: none;
+    }
+    #feedbackForm label, #orderForm label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      color: #00d4ff;
+    }
+    #feedbackForm textarea,
+    #feedbackForm input[type="email"],
+    #orderForm textarea,
+    #orderForm input[type="email"],
+    #orderForm input[type="number"],
+    #orderForm select {
+      width: 100%;
+      padding: 14px 18px;
+      margin-bottom: 1.4rem;
+      border-radius: 14px;
+      border: none;
+      font-size: 1.05rem;
+      font-family: inherit;
+      background: #222;
+      color: #eee;
+      box-shadow: inset 0 0 10px #005bbb;
+      transition: box-shadow 0.3s ease, background 0.3s ease;
+    }
+    #orderForm select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23eee'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1.5rem;
+    }
+    #feedbackForm textarea:focus,
+    #feedbackForm input[type="email"]:focus,
+    #orderForm textarea:focus,
+    #orderForm input[type="email"]:focus,
+    #orderForm input[type="number"]:focus,
+    #orderForm select:focus {
+      outline: none;
+      box-shadow: 0 0 18px #00d4ff;
+      background: #1a1a1a;
+    }
+    #feedbackForm button, #orderForm button {
+      background-color: #00d4ff;
+      border: none;
+      padding: 1rem 3rem;
+      font-size: 1.15rem;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #0a0a0a;
+      box-shadow: 0 6px 25px rgba(0, 212, 255, 0.8);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      user-select: none;
+      width: 100%;
+    }
+    #feedbackForm button:hover, #orderForm button:hover {
+      background-color: #0088cc;
+      box-shadow: 0 8px 35px rgba(0, 136, 204, 1);
+      transform: translateY(-3px);
+    }
+    #feedbackMessage, #orderMessage {
+      margin-top: 1.2rem;
+      font-weight: 600;
+      min-height: 1.4rem;
+      user-select: text;
+    }
+    #priceEstimate {
+      margin-top: 1rem;
+      font-weight: 600;
+      color: #88c571;
+      min-height: 1.4rem;
+    }
+    /* Smooth scroll container for vertical scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      .store-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+      .box-carousel {
+        gap: 1.2rem;
+      }
+      .box-carousel .box {
+        flex: 0 0 100px;
+        height: 100px;
+        font-size: 1.1rem;
+      }
+      header h1 {
+        font-size: 1.8rem;
+      }
+      .container {
+        padding: 1rem 1.5rem 3rem;
+      }
+      #feedbackForm, #orderForm {
+        padding: 2rem 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Wave Studio - Pricing & Order</h1>
+  </header>
+  <div class="container">
+    <!-- Tab Buttons -->
+    <nav class="tab-buttons" role="tablist" aria-label="Wave Studio Sections">
+      <button class="active" role="tab" aria-selected="true" aria-controls="wave" id="tab-wave" data-tab="wave" tabindex="0">Wave</button>
+      <button role="tab" aria-selected="false" aria-controls="order" id="tab-order" data-tab="order" tabindex="-1">Order</button>
+      <button role="tab" aria-selected="false" aria-controls="contact" id="tab-contact" data-tab="contact" tabindex="-1">Feedback</button>
+    </nav>
+    <!-- Tab Contents -->
+    <section id="wave" class="tab-content active" role="tabpanel" aria-labelledby="tab-wave" tabindex="0">
+      <h2>Wave Studio Pricelist</h2>
+      <p>Explore our premium services, custom-made and optimized for your needs. All prices in Robux.</p>
+      <div class="store-grid" aria-label="Wave Studio pricelist items">
+        <div class="card">14x Server Boosts - 1,000 Robux</div>
+        <div class="card">Basic GFX - 70 Robux</div>
+        <div class="card">Advanced GFX - 155 Robux</div>
+        <div class="card">Premium GFX (Dynamic, Studio-Quality) - 200-500 Robux</div>
+        <div class="card">Kits without Resell Permissions - 45 Robux</div>
+        <div class="card">Kits with Resell Permissions - 75 Robux</div>
+        <div class="card">No Folds Render - 55 Robux</div>
+        <div class="card">With Folds Render - 60 Robux</div>
+        <div class="card">Custom Anti-Cheat System - 500-1,000 Robux</div>
+        <div class="card">Authentication/Login Systems - +250 Robux</div>
+        <div class="card">Full Studio Website (Custom CMS) - 500-1,000 Robux</div>
+        <div class="card">Portfolio/Devlog Site - 800 Robux</div>
+        <div class="card">Basic Bot (Commands, Moderation) - 400 Robux</div>
+        <div class="card">Advanced Bot (Live Stats, Signing) - 500-1,000 Robux</div>
+      </div>
+      <div style="max-width: 650px; margin: 2rem auto; font-size: 1rem; color: #eee; background: #151515; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 170, 255, 0.5);">
+        <h3>Notes</h3>
+        <ul style="margin: 0; padding-left: 1.5rem;">
+          <li>All services are custom-made, optimized, and delivered with polish.</li>
+          <li>Discounts available for bulk orders or Wave Monaco partners.</li>
+          <li>All prices can be negotiated.</li>
+          <li>Most orders take 1–3 days, large systems up to 7 days.</li>
+        </ul>
+      </div>
+      <div class="box-carousel" role="list" aria-label="Wave Studio offer highlights">
+        <div class="box active" role="listitem" tabindex="0" aria-current="true">Fast</div>
+        <div class="box" role="listitem" tabindex="-1">Reliable</div>
+        <div class="box" role="listitem" tabindex="-1">Affordable</div>
+        <div class="box" role="listitem" tabindex="-1">Creative</div>
+        <div class="box" role="listitem" tabindex="-1">Trusted</div>
+      </div>
+    </section>
+    <section id="order" class="tab-content" role="tabpanel" aria-labelledby="tab-order" tabindex="0">
+      <h2>Place Your Order</h2>
+      <p>Select your desired service from the <a href="#wave">Wave Pricelist</a> and provide details below. Orders are logged for our team to process. Contact us via <a href="mailto:orders@wavementstudio.com">orders@wavementstudio.com</a> for inquiries.</p>
+      <form id="orderForm" aria-live="polite" aria-atomic="true" novalidate>
+        <label for="service">Select Service * <span aria-hidden="true">(see <a href="#wave">pricelist</a>)</span></label>
+        <select id="service" name="service" required aria-required="true" aria-describedby="serviceHelp">
+          <option value="" disabled selected>Select a service</option>
+          <option value="14x Server Boosts">14x Server Boosts - 1,000 Robux</option>
+          <option value="Basic GFX">Basic GFX - 70 Robux</option>
+          <option value="Advanced GFX">Advanced GFX - 155 Robux</option>
+          <option value="Premium GFX">Premium GFX - 200-500 Robux</option>
+          <option value="Kits without Resell Permissions">Kits without Resell Permissions - 45 Robux</option>
+          <option value="Kits with Resell Permissions">Kits with Resell Permissions - 75 Robux</option>
+          <option value="No Folds Render">No Folds Render - 55 Robux</option>
+          <option value="With Folds Render">With Folds Render - 60 Robux</option>
+          <option value="Custom Anti-Cheat System">Custom Anti-Cheat System - 500-1,000 Robux</option>
+          <option value="Authentication/Login Systems">Authentication/Login Systems - +250 Robux</option>
+          <option value="Full Studio Website">Full Studio Website (Custom CMS) - 500-1,000 Robux</option>
+          <option value="Portfolio/Devlog Site">Portfolio/Devlog Site - 800 Robux</option>
+          <option value="Basic Bot">Basic Bot (Commands, Moderation) - 400 Robux</option>
+          <option value="Advanced Bot">Advanced Bot (Live Stats, Signing) - 500-1,000 Robux</option>
+        </select>
+        <p id="serviceHelp" class="sr-only">Select a service from the Wave Pricelist to place your order.</p>
+        <label for="quantity">Quantity * <span id="quantityHint" aria-hidden="true">(e.g., 1 for single item)</span></label>
+        <input type="number" id="quantity" name="quantity" min="1" value="1" required aria-required="true" aria-describedby="quantityHelp" />
+        <p id="quantityHelp" class="sr-only">Enter the quantity of the selected service (minimum 1).</p>
+        <label for="complexity">Complexity Level (for variable-priced items)</label>
+        <select id="complexity" name="complexity" aria-describedby="complexityHelp">
+          <option value="" disabled selected>Select complexity (if applicable)</option>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+        <p id="complexityHelp" class="sr-only">Select complexity for services with variable pricing, such as Premium GFX or Custom Anti-Cheat System.</p>
+        <label for="orderDetails">Additional Details *</label>
+        <textarea id="orderDetails" name="orderDetails" rows="6" placeholder="Specify your requirements, customizations, or any other details..." required aria-required="true" aria-describedby="detailsHelp"></textarea>
+        <p id="detailsHelp" class="sr-only">Provide specific requirements or customizations for your order.</p>
+        <label for="orderEmail">Your Email (optional):</label>
+        <input type="email" id="orderEmail" name="orderEmail" placeholder="example@domain.com" aria-describedby="orderEmailHelp" />
+        <p id="orderEmailHelp" class="sr-only">Enter your email for order follow-up (optional).</p>
+        <p id="priceEstimate" aria-live="polite"></p>
+        <button type="submit">Place Order</button>
+        <p id="orderMessage" role="alert" aria-live="assertive"></p>
+      </form>
+    </section>
+    <section id="contact" class="tab-content" role="tabpanel" aria-labelledby="tab-contact" tabindex="0">
+      <h2>Feedback</h2>
+      <p>We love hearing from you! Please send us your feedback or inquiries.</p>
+      <form id="feedbackForm" aria-live="polite" aria-atomic="true" novalidate>
+        <label for="email">Your Email (optional):</label>
+        <input type="email" id="email" name="email" placeholder="example@domain.com" aria-describedby="emailHelp" />
+        <p id="emailHelp" class="sr-only">Enter your email for feedback follow-up (optional).</p>
+        <label for="message">Your Message *</label>
+        <textarea id="message" name="message" rows="6" placeholder="Type your message here..." required aria-required="true" aria-describedby="messageHelp"></textarea>
+        <p id="messageHelp" class="sr-only">Enter your feedback or inquiry message.</p>
+        <button type="submit">Send Feedback</button>
+        <p id="feedbackMessage" role="alert" aria-live="assertive"></p>
+      </form>
+    </section>
+  </div>
+  <script>
+    // Tab switching logic
+    const tabs = document.querySelectorAll('.tab-buttons button');
+    const contents = document.querySelectorAll('.tab-content');
+    const boxes = document.querySelectorAll('.box-carousel .box');
+    function activateTab(tabName) {
+      tabs.forEach(btn => {
+        const isActive = btn.dataset.tab === tabName;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', isActive);
+        btn.tabIndex = isActive ? 0 : -1;
+      });
+      contents.forEach(content => {
+        content.classList.toggle('active', content.id === tabName);
+      });
+    }
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        activateTab(tab.dataset.tab);
+        const panel = document.getElementById(tab.dataset.tab);
+        if (panel) panel.focus();
+      });
+      tab.addEventListener('keydown', (e) => {
+        const idx = [...tabs].indexOf(e.target);
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          tabs[(idx + 1) % tabs.length].focus();
+        }
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          tabs[(idx - 1 + tabs.length) % tabs.length].focus();
+        }
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          activateTab(e.target.dataset.tab);
+          const panel = document.getElementById(e.target.dataset.tab);
+          if (panel) panel.focus();
+        }
+      });
+    });
+    // Wave box carousel cycling
+    let activeBoxIndex = 0;
+    function setActiveBox(index) {
+      boxes.forEach((box, i) => {
+        box.classList.toggle('active', i === index);
+        box.tabIndex = i === index ? 0 : -1;
+        box.setAttribute('aria-current', i === index ? 'true' : 'false');
+      });
+    }
+    setActiveBox(activeBoxIndex);
+    boxes.forEach((box, idx) => {
+      box.addEventListener('click', () => {
+        activeBoxIndex = idx;
+        setActiveBox(activeBoxIndex);
+      });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          activeBoxIndex = idx;
+          setActiveBox(activeBoxIndex);
+        }
+      });
+    });
+    setInterval(() => {
+      activeBoxIndex = (activeBoxIndex + 1) % boxes.length;
+      setActiveBox(activeBoxIndex);
+    }, 5000);
+    // Feedback form handling
+    const feedbackForm = document.getElementById('feedbackForm');
+    const feedbackMsg = document.getElementById('feedbackMessage');
+    feedbackForm.addEventListener('submit', e => {
+      e.preventDefault();
+      feedbackMsg.textContent = '';
+      const email = feedbackForm.email.value.trim();
+      const message = feedbackForm.message.value.trim();
+      if (!message) {
+        feedbackMsg.style.color = '#ff6161';
+        feedbackMsg.textContent = 'Please enter a message before submitting.';
+        feedbackForm.message.focus();
+        return;
+      }
+      if (email && !/^\S+@\S+\.\S+$/.test(email)) {
+        feedbackMsg.style.color = '#ff6161';
+        feedbackMsg.textContent = 'Please enter a valid email address or leave it blank.';
+        feedbackForm.email.focus();
+        return;
+      }
+      feedbackMsg.style.color = '#88c571';
+      feedbackMsg.textContent = 'Sending feedback...';
+      setTimeout(() => {
+        feedbackMsg.style.color = '#88c571';
+        feedbackMsg.textContent = 'Thank you for your feedback! We will get back to you soon.';
+        feedbackForm.reset();
+      }, 1500);
+    });
+    // Order form handling
+    const orderForm = document.getElementById('orderForm');
+    const orderMsg = document.getElementById('orderMessage');
+    const priceEstimate = document.getElementById('priceEstimate');
+    const serviceSelect = document.getElementById('service');
+    const quantityInput = document.getElementById('quantity');
+    const complexitySelect = document.getElementById('complexity');
+    const priceMap = {
+      '14x Server Boosts': 1000,
+      'Basic GFX': 70,
+      'Advanced GFX': 155,
+      'Kits without Resell Permissions': 45,
+      'Kits with Resell Permissions': 75,
+      'No Folds Render': 55,
+      'With Folds Render': 60,
+      'Portfolio/Devlog Site': 800,
+      'Basic Bot': 400
+    };
+    function updatePriceEstimate() {
+      const service = serviceSelect.value;
+      const quantity = parseInt(quantityInput.value) || 1;
+      priceEstimate.textContent = '';
+      if (priceMap[service]) {
+        const total = priceMap[service] * quantity;
+        priceEstimate.textContent = `Estimated Price: ${total} Robux`;
+      } else if (service) {
+        priceEstimate.textContent = 'Price varies based on complexity';
+      }
+    }
+    serviceSelect.addEventListener('change', updatePriceEstimate);
+    quantityInput.addEventListener('input', updatePriceEstimate);
+    orderForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      orderMsg.textContent = '';
+      const service = orderForm.service.value;
+      const quantity = orderForm.quantity.value;
+      const complexity = orderForm.complexity.value;
+      const details = orderForm.orderDetails.value.trim();
+      const email = orderForm.orderEmail.value.trim();
+      if (!service) {
+        orderMsg.style.color = '#ff6161';
+        orderMsg.textContent = 'Please select a service.';
+        orderForm.service.focus();
+        return;
+      }
+      if (!quantity || quantity < 1) {
+        orderMsg.style.color = '#ff6161';
+        orderMsg.textContent = 'Please enter a valid quantity (minimum 1).';
+        orderForm.quantity.focus();
+        return;
+      }
+      if (!details) {
+        orderMsg.style.color = '#ff6161';
+        orderMsg.textContent = 'Please provide additional details for your order.';
+        orderForm.orderDetails.focus();
+        return;
+      }
+      if (email && !/^\S+@\S+\.\S+$/.test(email)) {
+        orderMsg.style.color = '#ff6161';
+        orderMsg.textContent = 'Please enter a valid email address or leave it blank.';
+        orderForm.orderEmail.focus();
+        return;
+      }
+      const variablePriced = [
+        'Premium GFX',
+        'Custom Anti-Cheat System',
+        'Full Studio Website',
+        'Advanced Bot'
+      ];
+      if (variablePriced.includes(service) && !complexity) {
+        orderMsg.style.color = '#ff6161';
+        orderMsg.textContent = 'Please select a complexity level for this service.';
+        orderForm.complexity.focus();
+        return;
+      }
+      orderMsg.style.color = '#88c571';
+      orderMsg.textContent = 'Submitting order...';
+      const webhookUrl = 'https://discord.com/api/webhooks/1386375321036783678/7UqaDg3EzCnOOoCitG3BM9lqo7k7PsHUKX937ZiSSDqeTGXCixMXs9VmpiHtjzIh0vYA';
+      const payload = {
+        content: `**New Order**\n**Service**: ${service}\n**Quantity**: ${quantity}\n**Complexity**: ${complexity || 'N/A'}\n**Details**: ${details}\n**Email**: ${email || 'None'}`
+      };
+      try {
+        const response = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (response.ok) {
+          orderMsg.style.color = '#88c571';
+          orderMsg.textContent = 'Order submitted successfully! Our team will review it soon.';
+          orderForm.reset();
+          priceEstimate.textContent = '';
+        } else {
+          orderMsg.style.color = '#ff6161';
+          orderMsg.textContent = 'Failed to submit order. Please try again or contact support.';
+        }
+      } catch (error) {
+        orderMsg.style.color = '#ff6161';
+        orderMsg.textContent = 'Error submitting order. Please try again or contact support.';
+      }
+    });
+  </script>
+</body>
+</html>
